@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masayama <masayama@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: masayama <masayama@student.42tokyo.jp>     #+#  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/26 01:04:03 by masayama          #+#    #+#             */
-/*   Updated: 2025/01/26 01:20:08 by masayama         ###   ########.fr       */
+/*   Created: 2025-01-26 03:37:56 by masayama          #+#    #+#             */
+/*   Updated: 2025-01-26 03:37:56 by masayama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ unsigned char	ft_get_char(int fd)
 {
 	static unsigned char	buffer[BUFFER_SIZE];
 	static unsigned char	*buffer_ptr = buffer;
-	static int				current_bytes = 0;
+	static int				buffer_remaining = 0;
 	int						read_bytes;
 
-	if (current_bytes == 0)
+	if (buffer_remaining == 0)
 	{
 		read_bytes = read(fd, buffer, BUFFER_SIZE);
 		if (read_bytes < 0)
@@ -34,9 +34,9 @@ unsigned char	ft_get_char(int fd)
 		if (read_bytes == 0)
 			return (EOF);
 		buffer_ptr = buffer;
-		current_bytes = read_bytes;
+		buffer_remaining = read_bytes;
 	}
-	current_bytes--;
+	buffer_remaining--;
 	return (*buffer_ptr++);
 }
 
@@ -76,7 +76,7 @@ int	ft_push_char(t_gnl_buffer *buffer, char c)
 	if (buffer->length + 1 >= buffer->capacity)
 	{
 		if (buffer->capacity == 0)
-			buffer->capacity = 1;
+			buffer->capacity = 128;
 		else
 			buffer->capacity *= 2;
 		if (!ft_expand_buffer(buffer, buffer->capacity))
