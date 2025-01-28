@@ -6,9 +6,7 @@
   <img src="get_next_linee.png" alt="ready to help"/>
 </p>
 
-<h2 align="center">
-  Key Points
-</h2>
+# Key Points
 
 ## 静的変数
 静的変数とは、プログラム開始時にメモリ上に領域を確保し、プログラム終了まで同じ領域を利用し続ける変数</br>
