@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: masayama <masayama@student.42tokyo.jp>     #+#  +:+       +#+        */
+/*   By: masayama <masayama@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025-01-26 03:37:56 by masayama          #+#    #+#             */
-/*   Updated: 2025-01-26 03:37:56 by masayama         ###   ########.fr       */
+/*   Created: 2025/01/26 01:04:03 by masayama          #+#    #+#             */
+/*   Updated: 2025/01/28 22:11:02 by masayama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ void	ft_init_buffer(t_gnl_buffer *buffer)
 	buffer->capacity = 0;
 }
 
-unsigned char	ft_get_char(int fd)
+int	ft_get_char(int fd)
 {
 	static unsigned char	buffer[BUFFER_SIZE];
 	static unsigned char	*buffer_ptr = buffer;
 	static int				buffer_remaining = 0;
-	int						read_bytes;
+	ssize_t					read_bytes;
 
 	if (buffer_remaining == 0)
 	{
@@ -37,16 +37,16 @@ unsigned char	ft_get_char(int fd)
 		buffer_remaining = read_bytes;
 	}
 	buffer_remaining--;
-	return (*buffer_ptr++);
+	return ((int)*buffer_ptr++);
 }
 
 void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	char		*d;
-	const char	*s;
+	unsigned char		*d;
+	const unsigned char	*s;
 
-	d = (char *)dst;
-	s = (const char *)src;
+	d = (unsigned char *)dst;
+	s = (const unsigned char *)src;
 	if (!dst && !src)
 		return (NULL);
 	while (n--)
@@ -54,13 +54,13 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-int	ft_expand_buffer(t_gnl_buffer *buffer, size_t new_capacity)
+int	ft_realloc_buffer(t_gnl_buffer *buffer, size_t new_capacity)
 {
 	char	*new_data;
 
 	new_data = (char *)malloc(new_capacity);
 	if (!new_data)
-		return (0);
+		return (GNL_REALLOC_ERROR);
 	if (buffer->data)
 	{
 		ft_memcpy(new_data, buffer->data, buffer->length);
@@ -68,7 +68,7 @@ int	ft_expand_buffer(t_gnl_buffer *buffer, size_t new_capacity)
 	}
 	buffer->data = new_data;
 	buffer->capacity = new_capacity;
-	return (1);
+	return (0);
 }
 
 int	ft_push_char(t_gnl_buffer *buffer, char c)
@@ -76,12 +76,12 @@ int	ft_push_char(t_gnl_buffer *buffer, char c)
 	if (buffer->length + 1 >= buffer->capacity)
 	{
 		if (buffer->capacity == 0)
-			buffer->capacity = 128;
+			buffer->capacity = BUFFER_SIZE;
 		else
 			buffer->capacity *= 2;
-		if (!ft_expand_buffer(buffer, buffer->capacity))
-			return (0);
+		if (ft_realloc_buffer(buffer, buffer->capacity) == GNL_REALLOC_ERROR)
+			return (GNL_PUSH_CHAR_ERROR);
 	}
 	buffer->data[buffer->length++] = c;
-	return (1);
+	return (0);
 }
