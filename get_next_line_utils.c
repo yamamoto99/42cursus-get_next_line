@@ -6,7 +6,7 @@
 /*   By: masayama <masayama@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/26 01:04:03 by masayama          #+#    #+#             */
-/*   Updated: 2025/01/28 22:11:02 by masayama         ###   ########.fr       */
+/*   Updated: 2025/01/28 22:28:53 by masayama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	ft_realloc_buffer(t_gnl_buffer *buffer, size_t new_capacity)
 	return (0);
 }
 
-int	ft_push_char(t_gnl_buffer *buffer, char c)
+int	ft_push_char(t_gnl_buffer *buffer, unsigned char c)
 {
 	if (buffer->length + 1 >= buffer->capacity)
 	{
@@ -82,6 +82,6 @@ int	ft_push_char(t_gnl_buffer *buffer, char c)
 		if (ft_realloc_buffer(buffer, buffer->capacity) == GNL_REALLOC_ERROR)
 			return (GNL_PUSH_CHAR_ERROR);
 	}
-	buffer->data[buffer->length++] = c;
+	buffer->data[buffer->length++] = (char)c;
 	return (0);
 }
