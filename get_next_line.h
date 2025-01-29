@@ -6,7 +6,7 @@
 /*   By: masayama <masayama@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/25 21:41:13 by masayama          #+#    #+#             */
-/*   Updated: 2025/01/28 22:32:20 by masayama         ###   ########.fr       */
+/*   Updated: 2025/01/29 13:36:54 by masayama         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 128
+#  define BUFFER_SIZE 4096
 # endif
 # define GNL_READ_ERROR -2
 # define GNL_REALLOC_ERROR -3
